@@ -34,7 +34,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
     /**
      * This method initializes the graph on which this set of algorithms operates.
      *
-     * @param  g
+     * @param g
      */
     @Override
     public void init(weighted_graph g) {
@@ -179,12 +179,13 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
 
             System.out.println("The weighted graph has been serialized");
 
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             System.out.print("Error writing file\n" + ex);
-            return false;        }
+            return false;
+        }
         return true;
     }
+
     /**
      * This method load a graph to this graph algorithm.
      * if the file was successfully loaded - the underlying graph of this class will be changed (to the loaded one),
@@ -195,8 +196,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
      */
     @Override
     public boolean load(String file) {
-        try
-        {
+        try {
             // Reading the object from a file
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream in = new ObjectInputStream(fis);
@@ -209,19 +209,15 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
 
             System.out.println("The weighted graph has been deserialized ");
 
-        }
-
-        catch(IOException ex) {
+        } catch (IOException ex) {
+            System.out.print("Error reading file\n" + ex);
+            return false;
+        } catch (ClassNotFoundException ex) {
             System.out.print("Error reading file\n" + ex);
             return false;
         }
 
-        catch(ClassNotFoundException ex) {
-            System.out.print("Error reading file\n" + ex);
-            return false;
-        }
-
-    return true;
+        return true;
     }
 
     /**
@@ -288,7 +284,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
      * Note: The method change the info and pre values.
      * Complexity: O((|V|+|E|)log|V|), |V|=number of nodes, |E|=number of edges.
      *
-     * @param src - the source node_info
+     * @param src  - the source node_info
      * @param dest - the destination node_info
      * @return the shortest path between the two nodes and infinity(Integer.MAX_VALUE) if there is no path like this.
      */
@@ -372,10 +368,8 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
     }
 
 
-
-
-      ////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-     //////////////////////////MY SAVE & LOAD\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+    ////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+    //////////////////////////MY SAVE & LOAD\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     //////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     public boolean mySave(String file) {
         try {
@@ -409,6 +403,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
         }
         return true;
     }
+
     private weighted_graph strToGraph(String s) {
         weighted_graph nwg = new WGraph_DS();
         String arr[] = s.split("\\|");
@@ -420,11 +415,11 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
             String ni = arr[i].substring(arr[i].indexOf("[") + 1, arr[i].indexOf("]"));
             String nib[] = ni.split(",");
             String key = arr[i].substring(5, arr[i].indexOf(","));
-            for(int j = 0 ; j < nib.length ; j++){
+            for (int j = 0; j < nib.length; j++) {
                 int k1 = Integer.parseInt(key);
-                int k2 = Integer.parseInt(nib[j].substring(0,nib[j].indexOf("(")));
-                double d = Double.parseDouble(nib[j].substring(nib[j].indexOf("(")+1,nib[j].indexOf(")")));
-                nwg.connect(k1,k2,d);
+                int k2 = Integer.parseInt(nib[j].substring(0, nib[j].indexOf("(")));
+                double d = Double.parseDouble(nib[j].substring(nib[j].indexOf("(") + 1, nib[j].indexOf(")")));
+                nwg.connect(k1, k2, d);
             }
         }
         return nwg;
@@ -481,11 +476,10 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
         weighted_graph_algorithms gra = new WGraph_Algo();
         gra.init(wg3);
 
-          System.out.println(wg.save("/Users/itailash/Desktop/test/testSeri2.txt"));
-         System.out.println(wg.load("/Users/itailash/Desktop/test/testSeri2.txt"));
-         System.out.println(wg.wg);
+        System.out.println(wg.save("/Users/itailash/Desktop/test/testSeri2.txt"));
+        System.out.println(wg.load("/Users/itailash/Desktop/test/testSeri2.txt"));
+        System.out.println(wg.wg);
         System.out.println(wg.equals(gra));
-
 
 
     }

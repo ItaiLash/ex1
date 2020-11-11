@@ -680,7 +680,6 @@ public class WGraph_DS implements weighted_graph, Serializable {
         wg2.connect(0, 1, 0.5);
         wg2.connect(0, 2, 3);
         System.out.println(wg2.edgeSize());
-
         System.out.println(wg.equals(wg2));
         System.out.println(wg2);
         System.out.println(wg);
