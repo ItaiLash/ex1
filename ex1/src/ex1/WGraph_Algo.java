@@ -34,7 +34,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
     /**
      * This method initializes the graph on which this set of algorithms operates.
      *
-     * @param g
+     * @param g - a weighted graph
      */
     @Override
     public void init(weighted_graph g) {
@@ -45,7 +45,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
     /**
      * This method returns the underlying graph of which this class works.
      *
-     * @return
+     * @return a weighted graph
      */
     @Override
     public weighted_graph getGraph() {
@@ -70,7 +70,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
      * Thus the method calls resetInfo function that resets the info that changed.
      * Complexity: O(|V|+|E|), |V|=number of nodes, |E|=number of edges.
      *
-     * @return
+     * @return true if connected, false otherwise
      */
     @Override
     public boolean isConnected() {
@@ -147,7 +147,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
             reverseList.add(temp);
             temp = (WGraph_DS.node) temp.getPre();
         }
-        node_info arr[] = reverseList.toArray(node_info[]::new);
+        node_info[] arr = reverseList.toArray(node_info[]::new);
         list.add(src2);
         for (int i = arr.length - 1; i >= 0; i--) {
             list.add(arr[i]);
@@ -208,11 +208,12 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
             fis.close();
 
             System.out.println("The weighted graph has been deserialized ");
-
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             System.out.print("Error reading file\n" + ex);
             return false;
-        } catch (ClassNotFoundException ex) {
+        }
+        catch (ClassNotFoundException ex) {
             System.out.print("Error reading file\n" + ex);
             return false;
         }
@@ -237,19 +238,19 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
      * Otherwise false.
      * Complexity: O(|V|+|E|), |V|=number of nodes, |E|=number of edges.
      *
-     * @param g
-     * @return
+     * @param g - a weighted graph
+     * @return true if all the nodes in the graph are marked as visited, false otherwise
      */
     private boolean bfs(weighted_graph g) {
         node_info n = g.getV().iterator().next();
-        Queue<node_info> queue = new LinkedList<node_info>();
+        Queue<node_info> queue = new LinkedList<>();
         n.setInfo("Green");
         queue.add(n);
         while (!queue.isEmpty()) {
             WGraph_DS.node temp = (WGraph_DS.node) queue.poll();
             Collection<node_info> h = temp.getNi();
             for (node_info next : h) {
-                if (next.getInfo() == "Blue") {
+                if (next.getInfo().equals("Blue")) {
                     next.setInfo("Green");
                     queue.add(next);
                 }
@@ -257,7 +258,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
         }
 
         for (node_info node : this.wg.getV()) {
-            if (node.getInfo() == "Blue") {
+            if (node.getInfo().equals("Blue")) {
                 return false;
             }
         }
@@ -269,7 +270,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
      * Dijkstra's algorithm is an algorithm for finding the shortest paths between nodes in a graph.
      * In other words it finds the shortest paths between the source node and the destination node.
      * The method uses the tag of each node to update his current distance from the source node.
-     * The method stored a priority queue(riority is determined by the tag) of the visited nodes:
+     * The method stored a priority queue(priority is determined by the tag) of the visited nodes:
      * Pop the first node from the queue.
      * Visit each one of this nodes neighbors:
      * Check if the node has already been visited, if so skip it(tag = Green -> visited, tag = Blue -> not visited).
@@ -298,7 +299,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
         while (!pq.isEmpty()) {
             WGraph_DS.node temp = (WGraph_DS.node) pq.poll();
             for (node_info n : temp.getNi()) {
-                if (n.getInfo() == "Blue") {
+                if (n.getInfo().equals("Blue")) {
                     WGraph_DS.node temp2 = (WGraph_DS.node) n;
                     if (n.getTag() > temp.getTag() + this.wg.getEdge(n.getKey(), temp.getKey())) {
                         n.setTag(Math.min(n.getTag(), temp.getTag() + this.wg.getEdge(n.getKey(), temp.getKey())));
@@ -386,7 +387,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
     }
 
     public boolean myLoad(String file) {
-        String str = "";
+        String str;
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
@@ -406,14 +407,14 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
 
     private weighted_graph strToGraph(String s) {
         weighted_graph nwg = new WGraph_DS();
-        String arr[] = s.split("\\|");
+        String[] arr = s.split("\\|");
         for (int i = 0; i < arr.length; i++) {
             String key = arr[i].substring(5, arr[i].indexOf(","));
             nwg.addNode(Integer.parseInt(key));
         }
         for (int i = 0; i < arr.length; i++) {
             String ni = arr[i].substring(arr[i].indexOf("[") + 1, arr[i].indexOf("]"));
-            String nib[] = ni.split(",");
+            String[] nib = ni.split(",");
             String key = arr[i].substring(5, arr[i].indexOf(","));
             for (int j = 0; j < nib.length; j++) {
                 int k1 = Integer.parseInt(key);

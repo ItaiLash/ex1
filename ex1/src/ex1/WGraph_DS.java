@@ -4,11 +4,10 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Objects;
 
 /**
  * This class is an implementation of weighted_graph interface.
- * WGraph_DS class implement an undirectional weighted graph.
+ * WGraph_DS class implement an unidirectional weighted graph.
  * It support a large number of nodes (over 10^6, with average degree of 10).
  * This implementation based on HashMap data structure.
  *
@@ -32,7 +31,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * Default constructor
      */
     public WGraph_DS() {
-        this.wg = new HashMap<Integer, node_info>();
+        this.wg = new HashMap<>();
         this.numOfEdge = 0;
         this.numOfNode = 0;
     }
@@ -65,7 +64,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * @return HashMap   new and identical HashMap.
      */
     private HashMap<Integer, node_info> nodeDeepCopy(weighted_graph other) {
-        HashMap<Integer, node_info> h = new HashMap<Integer, node_info>();
+        HashMap<Integer, node_info> h = new HashMap<>();
         for (node_info n : other.getV()) {
             h.put(n.getKey(), new node(n));
         }
@@ -81,7 +80,6 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * Complexity: O(n^2) , |V|=n.
      *
      * @param other other graph that you want to duplicate his HashMap.
-     * @return HashMap   new and identity HashMap.
      */
     private void edgeDeepCopy(weighted_graph other) {
         Collection<node_info> valArr = other.getV();
@@ -114,8 +112,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * This method returns true iff (if and only if) there is an edge between node1 and node2.
      * Complexity: this method run in O(1) time.
      *
-     * @param node1
-     * @param node2
+     * @param node1 - a key(int)
+     * @param node2 - a key(int)
      * @return true or false.
      */
     @Override
@@ -129,8 +127,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * In case there is no such edge : return -1
      * Complexity: this method run in O(1) time.
      *
-     * @param node1
-     * @param node2
+     * @param node1 - a key(int)
+     * @param node2 - a key(int)
      * @return double.
      */
     @Override
@@ -147,7 +145,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * Complexity: this method run in O(1) time.
      * Note: if there is already a node with such a key -> no action be performed.
      *
-     * @param key
+     * @param key - the key of the new node
      */
     @Override
     public void addNode(int key) {
@@ -162,6 +160,9 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * Connect an edge between node1 and node2, with an edge with weight >=0.
      * Complexity: this method run in O(1) time.
      * Note: if the edge node1-node2 already exists - the method simply updates the weight of the edge.
+     * @param node1 - node's key
+     * @param node2 - node's key
+     * @param w - edge length
      */
     @Override
     public void connect(int node1, int node2, double w) {
@@ -180,7 +181,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * Collection representing all the nodes in the graph.
      * Complexity: this method run in O(1) time.
      *
-     * @return Collection<node_data>
+     * @return Collection of nodes
      */
     @Override
     public Collection<node_info> getV() {
@@ -192,8 +193,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * This collection represents all the nodes connected to node_id
      * Complexity: this method run in O(1) time.
      *
-     * @return Collection<node_data>
-     * @paran node_id
+     * @param node_id - key
+     * @return Collection of nodes
      */
     @Override
     public Collection<node_info> getV(int node_id) {
@@ -207,7 +208,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * Complexity: This method run in O(n), |V|=n, as all the edges should be removed.
      * Note: if the node (with the given ID) does not exists - the method simply does nothing.
      *
-     * @param key
+     * @param key - the key of the node to be deleted
      * @return the data of the removed node (null if none).
      */
     @Override
@@ -234,8 +235,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * Complexity: this method run in O(1) time.
      * Note: if the edge does not exists in the graph - the method simply does nothing.
      *
-     * @param node1
-     * @param node2
+     * @param node1 - a key(int)
+     * @param node2 - a key(int)
      */
     @Override
     public void removeEdge(int node1, int node2) {
@@ -253,7 +254,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * This method returns the number of nodes in the graph.
      * Complexity: this method run in O(1) time.
      *
-     * @return
+     * @return the number of nodes in the graph
      */
     @Override
     public int nodeSize() {
@@ -261,10 +262,10 @@ public class WGraph_DS implements weighted_graph, Serializable {
     }
 
     /**
-     * This method returns the number of edges (undirectional graph).
+     * This method returns the number of edges (unidirectional graph).
      * Complexity: this method run in O(1) time.
      *
-     * @return
+     * @return the number of edges in the graph
      */
     @Override
     public int edgeSize() {
@@ -276,7 +277,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * Any change in the inner state of the graph cause an increment in the ModeCount.
      * Complexity: O(1).
      *
-     * @return
+     * @return the number of changes that has been in the graph
      */
     @Override
     public int getMC() {
@@ -382,8 +383,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
             this.info = "Blue";
             this.tag = Integer.MAX_VALUE;
             this.pre = null;
-            this.ni = new HashMap<Integer, node_info>();
-            this.niDis = new HashMap<Integer, Double>();
+            this.ni = new HashMap<>();
+            this.niDis = new HashMap<>();
         }
 
         /**
@@ -398,8 +399,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
             this.key = n.getKey();
             this.info = n.getInfo();
             this.tag = n.getTag();
-            this.ni = new HashMap<Integer, node_info>();
-            this.niDis = new HashMap<Integer, Double>();
+            this.ni = new HashMap<>();
+            this.niDis = new HashMap<>();
         }
 
         /**
@@ -465,7 +466,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         /**
          * This method returns true iff this<==>key are adjacent, as an edge between them.
          *
-         * @param key
+         * @param key - int
          * @return true or false.
          */
         public boolean hasNi(int key) {
@@ -477,7 +478,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
          * In other words, the method add a weighted edge between this node ==> node t.
          * NOTE: if the map previously contained a mapping for the key, the old value is replaced.
          *
-         * @param t
+         * @param t - edge length
          */
         public void addNi(node_info t, double d) {
             if (this != t) {
@@ -489,7 +490,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         /**
          * This method removes the edge between this node ==> node.
          *
-         * @param node
+         * @param node - the node to be deleted
          */
         public void removeNode(node_info node) {
             if (this.ni.containsKey(node.getKey())) {
