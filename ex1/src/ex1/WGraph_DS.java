@@ -1,5 +1,6 @@
 package ex1;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,7 +13,7 @@ import java.util.Iterator;
  *
  * @author itai.lashover
  */
-public class WGraph_DS implements weighted_graph {
+public class WGraph_DS implements weighted_graph, Serializable {
 
     /**
      * Each WGraph_DS contains few fields:
@@ -274,21 +275,37 @@ public class WGraph_DS implements weighted_graph {
     /**
      * toString method
      */
+    /*
     @Override
     public String toString() {
         return "WGraph_DS{" +
                 "wg=" + wg +
                 '}';
     }
+    */
+    public String toString() {
+        String str = "";
+        Iterator<node_info> itr = this.wg.values().iterator();
+        while (itr.hasNext()) {
+            node_info n = itr.next();
+            if (!itr.hasNext()) {
+                str += n;
+            } else {
+                str += n + " |";
+            }
+        }
+        return str;
+    }
 
-    /**
-     * This private inner class is an implementation of node_info interface.
-     * node class implement Set of operations applicable on a
-     * node (vertex) in an (unidirectional) weighted graph.
-     * </p>
-     *
-     * @author itai.lashover
-     */
+
+        /**
+         * This private inner class is an implementation of node_info interface.
+         * node class implement Set of operations applicable on a
+         * node (vertex) in an (unidirectional) weighted graph.
+         * </p>
+         *
+         * @author itai.lashover
+         */
     public class node implements node_info, Comparable<node> {
 
         /**
@@ -477,16 +494,19 @@ public class WGraph_DS implements weighted_graph {
         public String toString() {
             String str = "[";
             Collection<node_info> keyArr = ni.values();
-            Iterator<node_info> iterator = ni.values().iterator();
+            Iterator<node_info> iterator = keyArr.iterator();
+            Collection<Double> lenArr = niDis.values();
+            Iterator<Double> iterator2 = lenArr.iterator();
             while (iterator.hasNext()) {
                 node_info n = iterator.next();
+                double d = iterator2.next();
                 if (!iterator.hasNext()) {
-                    str += n.getKey() + "] ";
+                    str += n.getKey() + "(" + d + ")" + "]";
                 } else {
-                    str += n.getKey() + ", ";
+                    str += n.getKey() + "(" + d + ")" + ",";
                 }
             }
-            return "NodeData: { Key: " + this.key + ", Neighbors: " + str + "}";
+            return "{Key:" + this.key + ",Neighbors:" + str + "}";
         }
 
 

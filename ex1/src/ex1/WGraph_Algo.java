@@ -26,12 +26,13 @@ public class WGraph_Algo implements weighted_graph_algorithms {
     /**
      * Default constructor
      */
-    public WGraph_Algo(){
+    public WGraph_Algo() {
         this.wg = new WGraph_DS();
     }
 
     /**
      * This method initializes the graph on which this set of algorithms operates.
+     *
      * @param g
      */
     @Override
@@ -42,6 +43,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     /**
      * This method returns the underlying graph of which this class works.
+     *
      * @return
      */
     @Override
@@ -52,6 +54,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
     /**
      * This method computes a deep copy of this graph.
      * The method does this by using the deep copy constructor in WGraph_DS.
+     *
      * @return identical graph.
      */
     @Override
@@ -65,11 +68,14 @@ public class WGraph_Algo implements weighted_graph_algorithms {
      * Note: BFS method changes the value of each node's tag.
      * Thus the method calls resetInfo function that resets the info that changed.
      * Complexity: O(|V|+|E|), |V|=number of nodes, |E|=number of edges.
+     *
      * @return
      */
     @Override
     public boolean isConnected() {
-        if (this.wg.nodeSize() == 0){return true;}
+        if (this.wg.nodeSize() == 0) {
+            return true;
+        }
         boolean b = this.bfs(this.wg);
         resetInfo();
         return b;
@@ -82,17 +88,20 @@ public class WGraph_Algo implements weighted_graph_algorithms {
      * Note2: Dijkstra method changes the value of each node's tag, info and pre.
      * Thus the method calls resetTag, resetInfo and resetPre functions that resets the tag ,the info and rhe pre that changed.
      * Complexity: O(|V|+|E|), |V|=number of nodes, |E|=number of edges.
-     * @param src - start node
+     *
+     * @param src  - start node
      * @param dest - end (target) node
      * @return the length of the shortest path between src to dest, -1 if there is no path.
      */
     @Override
     public double shortestPathDist(int src, int dest) {
-        double d =  Dijkstra(this.wg.getNode(src),this.wg.getNode(dest));
+        double d = Dijkstra(this.wg.getNode(src), this.wg.getNode(dest));
         resetInfo();
         resetTag();
         resetPre();
-        if(d == Integer.MAX_VALUE){return -1;}
+        if (d == Integer.MAX_VALUE) {
+            return -1;
+        }
         return d;
 
     }
@@ -107,38 +116,39 @@ public class WGraph_Algo implements weighted_graph_algorithms {
      * The method uses Dijkstra algorithm to build a List od nodes: dest --> ... -->src
      * Thus the method need to reverse the list later.
      * Complexity: O(|V|+|E|), |V|=number of nodes, |E|=number of edges.
-     * @param src - start node
+     *
+     * @param src  - start node
      * @param dest - end (target) node
      * @return List of nodes.
      */
     @Override
     public List<node_info> shortestPath(int src, int dest) {
         List<node_info> list = new LinkedList<>();
-        if(shortestPathDist(src,dest) == Integer.MAX_VALUE){
+        if (shortestPathDist(src, dest) == Integer.MAX_VALUE) {
             return null;
         }
-        if(this.wg.getNode(src) == null){
+        if (this.wg.getNode(src) == null) {
             throw new RuntimeException("This graph does not contain key " + src);
         }
-        if(this.wg.getNode(dest) == null){
+        if (this.wg.getNode(dest) == null) {
             throw new RuntimeException("This graph does not contain key " + dest);
         }
-        if(src == dest){
+        if (src == dest) {
             list.add(this.wg.getNode(dest));
             return list;
         }
-        Dijkstra(this.wg.getNode(src),this.wg.getNode(dest));
-        WGraph_DS.node src2 = (WGraph_DS.node)this.wg.getNode(src);
-        WGraph_DS.node dest2 = (WGraph_DS.node)this.wg.getNode(dest);
+        Dijkstra(this.wg.getNode(src), this.wg.getNode(dest));
+        WGraph_DS.node src2 = (WGraph_DS.node) this.wg.getNode(src);
+        WGraph_DS.node dest2 = (WGraph_DS.node) this.wg.getNode(dest);
         List<node_info> reverseList = new LinkedList<>();
         WGraph_DS.node temp = dest2;
-        while(temp.getPre() != null){
+        while (temp.getPre() != null) {
             reverseList.add(temp);
-            temp = (WGraph_DS.node)temp.getPre();
+            temp = (WGraph_DS.node) temp.getPre();
         }
         node_info arr[] = reverseList.toArray(node_info[]::new);
         list.add(src2);
-        for(int i=arr.length-1 ; i>=0 ; i--){
+        for (int i = arr.length - 1; i >= 0; i--) {
             list.add(arr[i]);
         }
         resetInfo();
@@ -149,20 +159,20 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     /**
      * This method saves this weighted (undirected) graph to the given file name.
+     *
      * @param file - the file name (may include a relative path).
      * @return true - iff the file was successfully saved, otherwise false.
      */
     @Override
     public boolean save(String file) {
-        boolean flag=true;
+        boolean flag = true;
         try {
             FileWriter fw = new FileWriter(file);
             PrintWriter outs = new PrintWriter(fw);
             outs.println(this.wg);
             outs.close();
             fw.close();
-        }
-        catch(IOException ex) {
+        } catch (IOException ex) {
             flag = false;
             System.out.print("Error writing file\n" + ex);
         }
@@ -173,36 +183,36 @@ public class WGraph_Algo implements weighted_graph_algorithms {
      * This method load a graph to this graph algorithm.
      * if the file was successfully loaded - the underlying graph of this class will be changed (to the loaded one),
      * In case the graph was not successfully loaded, the original graph would remain "as is".
+     *
      * @param file - file name
      * @return true - iff the graph was successfully loaded, otherwise false.
      */
     @Override
     public boolean load(String file) {
-        boolean flag = true;
+        //  boolean flag = true;
+        String str = "";
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
-            String str;
             str = br.readLine();
-            System.out.println(0+") "+str);
-            for(int i=1; str!=null; i=i+1) {
-                str = br.readLine();
-                if (str != null){
-                    System.out.println(i+") "+str);
-                }
-            }
+//            System.out.println(0+") "+str);
+//            for (int i = 1; str != null; i = i + 1) {
+//                str = br.readLine();
+//                if (str != null){
+//                    System.out.println(i+") "+str);
+//                }
+//            }
             br.close();
             fr.close();
-        }
-        catch(IOException ex) {
-            flag = false;
+        } catch (IOException ex) {
+            // flag = false;
             System.out.print("Error reading file\n" + ex);
             System.exit(2);
         }
-        if(flag){
-       //     this.wg =
+        if (str.length() != 0) {
+            init(strToGraph(str));
         }
-        return flag;
+        return true;
     }
 
     /**
@@ -210,7 +220,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
      * BFS is an algorithm for traversing or searching graph data structures.
      * The method checks whether or not the graph is linked,
      * in other words it checks whether there is a path between each node and each node.
-     *The method uses the tag of each vertex to know whether it has been visited or not
+     * The method uses the tag of each vertex to know whether it has been visited or not
      * The method stored a queue of the visited nodes:
      * Pop the first node from the queue
      * Check if the node has already been visited, if so skip it(tag = Green -> visited, tag = Blue -> not visited).
@@ -221,6 +231,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
      * If all the nodes in the graph are marked as visited the method will return true,
      * Otherwise false.
      * Complexity: O(|V|+|E|), |V|=number of nodes, |E|=number of edges.
+     *
      * @param g
      * @return
      */
@@ -230,7 +241,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         n.setInfo("Green");
         queue.add(n);
         while (!queue.isEmpty()) {
-            WGraph_DS.node temp = (WGraph_DS.node)queue.poll();
+            WGraph_DS.node temp = (WGraph_DS.node) queue.poll();
             Collection<node_info> h = temp.getNi();
             for (node_info next : h) {
                 if (next.getInfo() == "Blue") {
@@ -256,11 +267,11 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         pq.add(src);
 
         while (!pq.isEmpty()) {
-            WGraph_DS.node temp = (WGraph_DS.node)pq.poll();
+            WGraph_DS.node temp = (WGraph_DS.node) pq.poll();
             for (node_info n : temp.getNi()) {
-                if (n.getInfo() == "Blue" ) {
-                    WGraph_DS.node temp2 = (WGraph_DS.node)n;
-                    if(n.getTag() > temp.getTag() + this.wg.getEdge(n.getKey(),temp.getKey())) {
+                if (n.getInfo() == "Blue") {
+                    WGraph_DS.node temp2 = (WGraph_DS.node) n;
+                    if (n.getTag() > temp.getTag() + this.wg.getEdge(n.getKey(), temp.getKey())) {
                         n.setTag(Math.min(n.getTag(), temp.getTag() + this.wg.getEdge(n.getKey(), temp.getKey())));
                         temp2.setPre(temp);
                     }
@@ -274,6 +285,27 @@ public class WGraph_Algo implements weighted_graph_algorithms {
             }
         }
         return shortest;
+    }
+
+    private weighted_graph strToGraph(String s) {
+        weighted_graph nwg = new WGraph_DS();
+        String arr[] = s.split("\\|");
+        for (int i = 0; i < arr.length; i++) {
+            String key = arr[i].substring(5, arr[i].indexOf(","));
+            nwg.addNode(Integer.parseInt(key));
+        }
+        for (int i = 0; i < arr.length; i++) {
+            String ni = arr[i].substring(arr[i].indexOf("[") + 1, arr[i].indexOf("]"));
+            String nib[] = ni.split(",");
+            String key = arr[i].substring(5, arr[i].indexOf(","));
+            for(int j = 0 ; j < nib.length ; j++){
+                int k1 = Integer.parseInt(key);
+                int k2 = Integer.parseInt(nib[j].substring(0,nib[j].indexOf("(")));
+                double d = Double.parseDouble(nib[j].substring(nib[j].indexOf("(")+1,nib[j].indexOf(")")));
+                nwg.connect(k1,k2,d);
+            }
+        }
+        return nwg;
     }
 
     /**
@@ -290,7 +322,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
      * This private method resets the values of all the tags of the nodes in the graph.
      * Reset the value = change it back to default value: Integer.MAX_VALUE (infinity).
      */
-    private void resetTag(){
+    private void resetTag() {
         for (node_info n : this.wg.getV()) {
             n.setTag(Integer.MAX_VALUE);
         }
@@ -300,10 +332,10 @@ public class WGraph_Algo implements weighted_graph_algorithms {
      * This private method resets the value of pre in each node in the graph.
      * Reset the value = change it back to default value: null.
      */
-    private void resetPre(){
+    private void resetPre() {
         WGraph_DS.node temp;
         for (node_info n : this.wg.getV()) {
-            temp = (WGraph_DS.node)n;
+            temp = (WGraph_DS.node) n;
             temp.setPre(null);
         }
     }
@@ -323,50 +355,42 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         wg2.addNode(8);
         wg2.addNode(10);
 
+        wg2.connect(0, 1, 1);
+        wg2.connect(0, 2, 10);
+
+        wg2.connect(1, 4, 2);
+        wg2.connect(1, 5, 7);
+
+        wg2.connect(2, 4, 3);
+        wg2.connect(2, 6, 10);
+        wg2.connect(2, 3, 10);
+
+        wg2.connect(3, 6, 10);
+
+        wg2.connect(4, 5, 1);
+        wg2.connect(4, 7, 4);
 
 
-        wg2.connect(0,1,1);
-        wg2.connect(0,2,10);
+        wg2.connect(5, 7, 1);
+        wg2.connect(5, 8, 10);
+        wg2.connect(5, 10, 10);
 
-        wg2.connect(1,4,2);
-        wg2.connect(1,5,7);
+        wg2.connect(6, 10, 10);
 
-        wg2.connect(2,4,3);
-        wg2.connect(2,6,10);
-        wg2.connect(2,3,10);
+        wg2.connect(7, 10, 2);
 
-        wg2.connect(3,6,10);
-
-        wg2.connect(4,5,1);
-        wg2.connect(4,7,4);
-
-
-        wg2.connect(5,7,1);
-        wg2.connect(5,8,10);
-        wg2.connect(5,10,10);
-
-        wg2.connect(6,10,10);
-
-        wg2.connect(7,10,2);
-
-        wg2.connect(8,10,10);
-
-
-
-
-
-
-
-
+        wg2.connect(8, 10, 10);
 
         wg.init(wg2);
         System.out.println(wg.isConnected());
         System.out.println(wg);
-        double d = wg.shortestPathDist(0,2);
+        double d = wg.shortestPathDist(0, 2);
         System.out.println(d);
-        System.out.println(wg.shortestPath(0,2));
-//        System.out.println(wg.save("/Users/itailash/Desktop/test/test.txt"));
-//        System.out.println(wg.load("/Users/itailash/Desktop/test/test.txt"));
+        System.out.println(wg.shortestPath(0, 2));
+      //  System.out.println(wg.save("/Users/itailash/Desktop/test/test.txt"));
+         System.out.println(wg.load("/Users/itailash/Desktop/test/test.txt"));
+         System.out.println(wg.wg);
+
 
 
     }
