@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * This class is an implementation of weighted_graph interface.
@@ -49,7 +50,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         edgeDeepCopy(gra);
         this.numOfEdge = gra.edgeSize();
         this.numOfNode = gra.nodeSize();
-        this.mc = gra.getMC();
+        //this.mc = gra.getMC();
     }
 
     /**
@@ -166,16 +167,19 @@ public class WGraph_DS implements weighted_graph, Serializable {
     public void connect(int node1, int node2, double w) {
         node n1 = (node) this.wg.get(node1);
         node n2 = (node) this.wg.get(node2);
-        n1.addNi(n2, w);
-        n2.addNi(n1, w);
-        mc++;
-        this.numOfEdge++;
+        if (!n1.hasNi(node2) && node1 != node2 && n1 != null & n2 != null) {
+            n1.addNi(n2, w);
+            n2.addNi(n1, w);
+            mc++;
+            this.numOfEdge++;
+        }
     }
 
     /**
      * This method returns a pointer (shallow copy) for a
      * Collection representing all the nodes in the graph.
      * Complexity: this method run in O(1) time.
+     *
      * @return Collection<node_data>
      */
     @Override
@@ -187,8 +191,9 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * This method returns a collection of the neighbors of the node by his key.
      * This collection represents all the nodes connected to node_id
      * Complexity: this method run in O(1) time.
-     * @paran node_id
+     *
      * @return Collection<node_data>
+     * @paran node_id
      */
     @Override
     public Collection<node_info> getV(int node_id) {
@@ -201,8 +206,9 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * and removes all edges which starts or ends at this node.
      * Complexity: This method run in O(n), |V|=n, as all the edges should be removed.
      * Note: if the node (with the given ID) does not exists - the method simply does nothing.
-     * @return the data of the removed node (null if none).
+     *
      * @param key
+     * @return the data of the removed node (null if none).
      */
     @Override
     public node_info removeNode(int key) {
@@ -227,6 +233,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * This method delete the edge node1<==>node2 from the graph.
      * Complexity: this method run in O(1) time.
      * Note: if the edge does not exists in the graph - the method simply does nothing.
+     *
      * @param node1
      * @param node2
      */
@@ -242,8 +249,10 @@ public class WGraph_DS implements weighted_graph, Serializable {
         }
     }
 
-    /** This method returns the number of nodes in the graph.
+    /**
+     * This method returns the number of nodes in the graph.
      * Complexity: this method run in O(1) time.
+     *
      * @return
      */
     @Override
@@ -254,6 +263,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
     /**
      * This method returns the number of edges (undirectional graph).
      * Complexity: this method run in O(1) time.
+     *
      * @return
      */
     @Override
@@ -265,6 +275,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * This method returns the Mode Count - for testing changes in the graph.
      * Any change in the inner state of the graph cause an increment in the ModeCount.
      * Complexity: O(1).
+     *
      * @return
      */
     @Override
@@ -275,14 +286,6 @@ public class WGraph_DS implements weighted_graph, Serializable {
     /**
      * toString method
      */
-    /*
-    @Override
-    public String toString() {
-        return "WGraph_DS{" +
-                "wg=" + wg +
-                '}';
-    }
-    */
     public String toString() {
         String str = "";
         Iterator<node_info> itr = this.wg.values().iterator();
@@ -297,16 +300,63 @@ public class WGraph_DS implements weighted_graph, Serializable {
         return str;
     }
 
+    /**
+     * This private method returns true if the two HashMaps are equal to each other and false otherwise.
+     * Equality is determined by comparing the keys and values of the two Hashmaps.
+     * Note: The method uses "equals" method that compares  each pair of nodes.
+     *
+     * @param other - an HashMap<Integer,node_info>
+     * @return true if the arguments are equal to each other and false otherwise
+     */
+    private boolean graphNodeEquals(HashMap<Integer, node_info> other) {
+        if (!this.wg.keySet().equals(other.keySet())) {
+            return false;
+        }
+        Collection<node_info> c1 = this.wg.values();
+        Iterator<node_info> iterator1 = c1.iterator();
+        Collection<node_info> c2 = other.values();
+        Iterator<node_info> iterator2 = c2.iterator();
+        while (iterator1.hasNext() && iterator2.hasNext()) {
+            node n1 = (node) iterator1.next();
+            node n2 = (node) iterator2.next();
+            if (!n1.equals(n2)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-        /**
-         * This private inner class is an implementation of node_info interface.
-         * node class implement Set of operations applicable on a
-         * node (vertex) in an (unidirectional) weighted graph.
-         * </p>
-         *
-         * @author itai.lashover
-         */
-    public class node implements node_info, Comparable<node> {
+    /**
+     * This method returns true if the arguments are equal to each other and false otherwise.
+     * Consequently, if both arguments are null, true is returned
+     * and if exactly one argument is null, false is returned.
+     * Otherwise, equality is determined by comparing all the fields of the object.
+     * Note: The method uses "graphNodeEquals" method that compares the two HashMaps.
+     *
+     * @param o - an object
+     * @return true if the arguments are equal to each other and false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WGraph_DS wGraph_ds = (WGraph_DS) o;
+        return this.numOfEdge == wGraph_ds.numOfEdge &&
+                this.numOfNode == wGraph_ds.numOfNode &&
+                //         this.mc == wGraph_ds.mc &&
+                this.graphNodeEquals(wGraph_ds.wg);
+    }
+
+
+    /**
+     * This private inner class is an implementation of node_info interface.
+     * node class implement Set of operations applicable on a
+     * node (vertex) in an (unidirectional) weighted graph.
+     * </p>
+     *
+     * @author itai.lashover
+     */
+    public class node implements node_info, Comparable<node>, Serializable {
 
         /**
          * Each node contains few fields:
@@ -467,26 +517,6 @@ public class WGraph_DS implements weighted_graph, Serializable {
             this.pre = n;
         }
 
-        /*
-        @Override
-        public String toString() {
-            String str = "[";
-            Iterator<node_info> iterator = ni.values().iterator();
-            Iterator<Double> iterator2 = niDis.values().iterator();
-            while (iterator.hasNext() && iterator2.hasNext()) {
-                node_info n = iterator.next();
-                double d = iterator2.next();
-                if (!iterator.hasNext()) {
-                    str += "key: " + n.getKey() + " ,edge length: " + d + "] ";
-                }
-                else {
-                    str += "key: " + n.getKey() + " ,edge length: " + d + " | ";
-                }
-            }
-            return "NodeData: { Key: " + this.key + ", Neighbors: " + str + "}";
-        }
-*/
-
         /**
          * toString method
          */
@@ -518,6 +548,93 @@ public class WGraph_DS implements weighted_graph, Serializable {
             return Double.compare(this.getTag(), o.getTag());
         }
 
+        /**
+         * This private method returns true if the two nodes are equal to each other and false otherwise.
+         * Equality is determined by comparing the shallow fields of the node(key,tag and info).
+         *
+         * @param n - a node_info
+         * @return true if the arguments are equal to each other and false otherwise
+         */
+        private boolean nodeEquals(node_info n) {
+            node temp = (node) n;
+            return this.key == temp.key &&
+                    this.info.compareTo(temp.info) == 0 &&
+                    this.tag == temp.tag;
+        }
+
+        /**
+         * This private method returns true if the two HashMaps are equal to each other and false otherwise.
+         * Equality is determined by comparing the keys and values of the two Hashmaps.
+         * Note: The method uses "nodeEquals" method that compares two nodes only by their shallow fields.
+         *
+         * @param other - an HashMap<Integer,node_info>
+         * @return true if the arguments are equal to each other and false otherwise
+         */
+        private boolean hashMapOfNodeNiEquals(HashMap<Integer, node_info> other) {
+            if (!this.ni.keySet().equals(other.keySet())) {
+                return false;
+            }
+            Collection<node_info> c1 = this.ni.values();
+            Iterator<node_info> iterator1 = c1.iterator();
+            Collection<node_info> c2 = other.values();
+            Iterator<node_info> iterator2 = c2.iterator();
+            while (iterator1.hasNext() && iterator2.hasNext()) {
+                node n1 = (node) iterator1.next();
+                node n2 = (node) iterator2.next();
+                if (!n1.nodeEquals(n2)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /**
+         * This private method returns true if the two HashMaps are equal to each other and false otherwise.
+         * Equality is determined by comparing the keys and values of the two Hashmaps.
+         *
+         * @param other - an HashMap<Integer,Double>
+         * @return true if the arguments are equal to each other and false otherwise
+         */
+        private boolean hashMapOfDoublesEquals(HashMap<Integer, Double> other) {
+            if (!this.niDis.keySet().equals(other.keySet())) {
+                return false;
+            }
+            Collection<Double> c1 = this.niDis.values();
+            Iterator<Double> iterator1 = c1.iterator();
+            Collection<Double> c2 = other.values();
+            Iterator<Double> iterator2 = c2.iterator();
+            while (iterator1.hasNext() && iterator2.hasNext()) {
+                double d1 = iterator1.next();
+                double d2 = iterator2.next();
+                if (d1 != d2) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /**
+         * This method returns true if the arguments are equal to each other and false otherwise.
+         * Consequently, if both arguments are null, true is returned
+         * and if exactly one argument is null, false is returned.
+         * Otherwise, equality is determined by comparing all the fields of the object.
+         * Note1: The method uses "hashMapOfNodeNiEquals" method that compares the two HashMaps of nodes.
+         * Note2: The method uses "hashMapOfDoublesEquals" method that compares the two HashMaps of doubles.
+         *
+         * @param o - an Object
+         * @return true if the arguments are equal to each other and false otherwise
+         */
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            node node = (node) o;
+            return this.key == node.key &&
+                    Double.compare(node.tag, this.tag) == 0 &&
+                    this.info.compareTo(node.info) == 0 &&
+                    this.hashMapOfNodeNiEquals(node.ni) &&
+                    this.hashMapOfDoublesEquals(node.niDis);
+        }
     }
 
     public static void main(String[] args) {
@@ -543,10 +660,34 @@ public class WGraph_DS implements weighted_graph, Serializable {
 //        System.out.println(wg.nodeSize());
 //        System.out.println(wg.edgeSize());
         WGraph_DS wg2 = new WGraph_DS(wg);
+        System.out.println(wg2.edgeSize());
+        System.out.println(wg2.nodeSize());
+        System.out.println();
+
         System.out.println(wg2);
         wg2.removeNode(0);
+        System.out.println(wg2.edgeSize());
+        System.out.println(wg2.nodeSize());
+        System.out.println();
+
         System.out.println(wg2);
         System.out.println(wg);
+        System.out.println(wg.equals(wg2));
+        wg2.addNode(0);
+        System.out.println(wg2.nodeSize());
+
+        System.out.println(wg.equals(wg2));
+        wg2.connect(0, 1, 0.5);
+        wg2.connect(0, 2, 3);
+        System.out.println(wg2.edgeSize());
+
+        System.out.println(wg.equals(wg2));
+        System.out.println(wg2);
+        System.out.println(wg);
+        WGraph_DS wg3 = new WGraph_DS(wg);
+        System.out.println(wg.equals(wg3));
+        System.out.println(wg.getV());
+        System.out.println(wg2.getV());
 
 
     }

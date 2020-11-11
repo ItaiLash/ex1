@@ -16,12 +16,13 @@ import java.io.*;
  *
  * @author itai.lashover
  */
-public class WGraph_Algo implements weighted_graph_algorithms {
+public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializable {
 
     /**
      * The only field in the class is a graph on which we want to perform the methods.
      */
     private weighted_graph wg;
+
 
     /**
      * Default constructor
@@ -33,7 +34,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
     /**
      * This method initializes the graph on which this set of algorithms operates.
      *
-     * @param g
+     * @param  g
      */
     @Override
     public void init(weighted_graph g) {
@@ -165,20 +166,25 @@ public class WGraph_Algo implements weighted_graph_algorithms {
      */
     @Override
     public boolean save(String file) {
-        boolean flag = true;
         try {
-            FileWriter fw = new FileWriter(file);
-            PrintWriter outs = new PrintWriter(fw);
-            outs.println(this.wg);
-            outs.close();
-            fw.close();
-        } catch (IOException ex) {
-            flag = false;
-            System.out.print("Error writing file\n" + ex);
-        }
-        return flag;
-    }
+            //Saving of object in a file
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream out = new ObjectOutputStream(fos);
 
+            // Method for serialization of object
+            out.writeObject(this.wg);
+
+            out.close();
+            fos.close();
+
+            System.out.println("The weighted graph has been serialized");
+
+        }
+        catch (IOException ex) {
+            System.out.print("Error writing file\n" + ex);
+            return false;        }
+        return true;
+    }
     /**
      * This method load a graph to this graph algorithm.
      * if the file was successfully loaded - the underlying graph of this class will be changed (to the loaded one),
@@ -189,30 +195,33 @@ public class WGraph_Algo implements weighted_graph_algorithms {
      */
     @Override
     public boolean load(String file) {
-        //  boolean flag = true;
-        String str = "";
-        try {
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-            str = br.readLine();
-//            System.out.println(0+") "+str);
-//            for (int i = 1; str != null; i = i + 1) {
-//                str = br.readLine();
-//                if (str != null){
-//                    System.out.println(i+") "+str);
-//                }
-//            }
-            br.close();
-            fr.close();
-        } catch (IOException ex) {
-            // flag = false;
+        try
+        {
+            // Reading the object from a file
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream in = new ObjectInputStream(fis);
+
+            // Method for deserialization of object
+            this.init((weighted_graph) in.readObject());
+
+            in.close();
+            fis.close();
+
+            System.out.println("The weighted graph has been deserialized ");
+
+        }
+
+        catch(IOException ex) {
             System.out.print("Error reading file\n" + ex);
-            System.exit(2);
+            return false;
         }
-        if (str.length() != 0) {
-            init(strToGraph(str));
+
+        catch(ClassNotFoundException ex) {
+            System.out.print("Error reading file\n" + ex);
+            return false;
         }
-        return true;
+
+    return true;
     }
 
     /**
@@ -259,6 +268,30 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         return true;
     }
 
+    /**
+     * This private method based on Dijkstra's algorithm.
+     * Dijkstra's algorithm is an algorithm for finding the shortest paths between nodes in a graph.
+     * In other words it finds the shortest paths between the source node and the destination node.
+     * The method uses the tag of each node to update his current distance from the source node.
+     * The method stored a priority queue(riority is determined by the tag) of the visited nodes:
+     * Pop the first node from the queue.
+     * Visit each one of this nodes neighbors:
+     * Check if the node has already been visited, if so skip it(tag = Green -> visited, tag = Blue -> not visited).
+     * Updates his tag to be the distance between the node and the source node.
+     * Updates his pre To be the node from which he came to.
+     * Add this node to the queue.
+     * After going through all the neighbors of the node,
+     * updates that we visited this node by change his info to "Green" and therefore will not visit it again.
+     * Repeat these steps until the queue is empty or has reached the destination node.
+     * If the queue is empty it means it did not reach the destination node (the graph is not connected), return infinity.
+     * Otherwise returns the tag of the destination node
+     * Note: The method change the info and pre values.
+     * Complexity: O((|V|+|E|)log|V|), |V|=number of nodes, |E|=number of edges.
+     *
+     * @param src - the source node_info
+     * @param dest - the destination node_info
+     * @return the shortest path between the two nodes and infinity(Integer.MAX_VALUE) if there is no path like this.
+     */
     private double Dijkstra(node_info src, node_info dest) {
         double shortest = Integer.MAX_VALUE;
         PriorityQueue<node_info> pq = new PriorityQueue<>();
@@ -287,26 +320,6 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         return shortest;
     }
 
-    private weighted_graph strToGraph(String s) {
-        weighted_graph nwg = new WGraph_DS();
-        String arr[] = s.split("\\|");
-        for (int i = 0; i < arr.length; i++) {
-            String key = arr[i].substring(5, arr[i].indexOf(","));
-            nwg.addNode(Integer.parseInt(key));
-        }
-        for (int i = 0; i < arr.length; i++) {
-            String ni = arr[i].substring(arr[i].indexOf("[") + 1, arr[i].indexOf("]"));
-            String nib[] = ni.split(",");
-            String key = arr[i].substring(5, arr[i].indexOf(","));
-            for(int j = 0 ; j < nib.length ; j++){
-                int k1 = Integer.parseInt(key);
-                int k2 = Integer.parseInt(nib[j].substring(0,nib[j].indexOf("(")));
-                double d = Double.parseDouble(nib[j].substring(nib[j].indexOf("(")+1,nib[j].indexOf(")")));
-                nwg.connect(k1,k2,d);
-            }
-        }
-        return nwg;
-    }
 
     /**
      * This private method resets the value of info in each node in the graph.
@@ -338,6 +351,83 @@ public class WGraph_Algo implements weighted_graph_algorithms {
             temp = (WGraph_DS.node) n;
             temp.setPre(null);
         }
+    }
+
+    /**
+     * This method returns true if the arguments are equal to each other and false otherwise.
+     * Consequently, if both arguments are null, true is returned
+     * and if exactly one argument is null, false is returned.
+     * Otherwise, equality is determined by comparing the two weighted graph.
+     * Note: The method uses "equals" method that compares two weighted graphs.
+     *
+     * @param o - an object
+     * @return true if the arguments are equal to each other and false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        WGraph_Algo that = (WGraph_Algo) o;
+        return this.wg.equals(that.wg);
+    }
+
+
+
+
+      ////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+     //////////////////////////MY SAVE & LOAD\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+    //////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+    public boolean mySave(String file) {
+        try {
+            FileWriter fw = new FileWriter(file);
+            PrintWriter outs = new PrintWriter(fw);
+            outs.println(this.wg);
+            outs.close();
+            fw.close();
+        } catch (IOException ex) {
+            System.out.print("Error writing file\n" + ex);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean myLoad(String file) {
+        String str = "";
+        try {
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            str = br.readLine();
+            br.close();
+            fr.close();
+        } catch (IOException ex) {
+            System.out.print("Error reading file\n" + ex);
+            System.exit(2);
+            return false;
+        }
+        if (str.length() != 0) {
+            init(strToGraph(str));
+        }
+        return true;
+    }
+    private weighted_graph strToGraph(String s) {
+        weighted_graph nwg = new WGraph_DS();
+        String arr[] = s.split("\\|");
+        for (int i = 0; i < arr.length; i++) {
+            String key = arr[i].substring(5, arr[i].indexOf(","));
+            nwg.addNode(Integer.parseInt(key));
+        }
+        for (int i = 0; i < arr.length; i++) {
+            String ni = arr[i].substring(arr[i].indexOf("[") + 1, arr[i].indexOf("]"));
+            String nib[] = ni.split(",");
+            String key = arr[i].substring(5, arr[i].indexOf(","));
+            for(int j = 0 ; j < nib.length ; j++){
+                int k1 = Integer.parseInt(key);
+                int k2 = Integer.parseInt(nib[j].substring(0,nib[j].indexOf("(")));
+                double d = Double.parseDouble(nib[j].substring(nib[j].indexOf("(")+1,nib[j].indexOf(")")));
+                nwg.connect(k1,k2,d);
+            }
+        }
+        return nwg;
     }
 
 
@@ -387,9 +477,14 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         double d = wg.shortestPathDist(0, 2);
         System.out.println(d);
         System.out.println(wg.shortestPath(0, 2));
-      //  System.out.println(wg.save("/Users/itailash/Desktop/test/test.txt"));
-         System.out.println(wg.load("/Users/itailash/Desktop/test/test.txt"));
+        weighted_graph wg3 = wg.copy();
+        weighted_graph_algorithms gra = new WGraph_Algo();
+        gra.init(wg3);
+
+          System.out.println(wg.save("/Users/itailash/Desktop/test/testSeri2.txt"));
+         System.out.println(wg.load("/Users/itailash/Desktop/test/testSeri2.txt"));
          System.out.println(wg.wg);
+        System.out.println(wg.equals(gra));
 
 
 
