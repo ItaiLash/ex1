@@ -19,7 +19,7 @@ import java.io.*;
 public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializable {
 
     /**
-     * The only field in the class is a graph on which we want to perform the methods.
+     * The only field in the class is a weighted graph on which we want to perform the methods.
      */
     private weighted_graph wg;
 
@@ -88,7 +88,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
      * The method uses a combination of BFS and Dijkstra's algorithms.
      * Note2: Dijkstra method changes the value of each node's tag, info and pre.
      * Thus the method calls resetTag, resetInfo and resetPre functions that resets the tag ,the info and rhe pre that changed.
-     * Complexity: O(|V|+|E|), |V|=number of nodes, |E|=number of edges.
+     * Complexity: O((|V|+|E|)log|V|), |V|=number of nodes, |E|=number of edges.
      *
      * @param src  - start node
      * @param dest - end (target) node
@@ -116,7 +116,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
      * Thus the method calls resetTag, resetInfo and resetPre functions that resets the tag ,the info and rhe pre that changed.
      * The method uses Dijkstra algorithm to build a List od nodes: dest --> ... -->src
      * Thus the method need to reverse the list later.
-     * Complexity: O(|V|+|E|), |V|=number of nodes, |E|=number of edges.
+     * Complexity: O((|V|+|E|)log|V|), |V|=number of nodes, |E|=number of edges.
      *
      * @param src  - start node
      * @param dest - end (target) node
@@ -187,7 +187,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
     }
 
     /**
-     * This method load a graph to this graph algorithm.
+     * This method loads a graph to this graph algorithm.
      * if the file was successfully loaded - the underlying graph of this class will be changed (to the loaded one),
      * In case the graph was not successfully loaded, the original graph would remain "as is".
      *
@@ -226,16 +226,16 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
      * BFS is an algorithm for traversing or searching graph data structures.
      * The method checks whether or not the graph is linked,
      * in other words it checks whether there is a path between each node and each node.
-     * The method uses the tag of each vertex to know whether it has been visited or not
+     * The method uses the info of each vertex to know whether it has been visited or not
      * The method stored a queue of the visited nodes:
      * Pop the first node from the queue
      * Check if the node has already been visited, if so skip it(tag = Green -> visited, tag = Blue -> not visited).
-     * Otherwise mark it as visited (update his own tag) and add the node to the queue.
+     * Otherwise mark it as visited (update his own info) and add the node to the queue.
      * Add this node's neighbors to the queue and repeat these steps
-     * Note: The method change the info values.
      * After the queue is empty check the info of all the nodes in this graph.,
      * If all the nodes in the graph are marked as visited the method will return true,
      * Otherwise false.
+     * Note: The method change the info values.
      * Complexity: O(|V|+|E|), |V|=number of nodes, |E|=number of edges.
      *
      * @param g - a weighted graph
@@ -282,7 +282,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
      * Repeat these steps until the queue is empty or has reached the destination node.
      * If the queue is empty it means it did not reach the destination node (the graph is not connected), return infinity.
      * Otherwise returns the tag of the destination node
-     * Note: The method change the info and pre values.
+     * Note: The method change the info, tag and pre values.
      * Complexity: O((|V|+|E|)log|V|), |V|=number of nodes, |E|=number of edges.
      *
      * @param src  - the source node_info

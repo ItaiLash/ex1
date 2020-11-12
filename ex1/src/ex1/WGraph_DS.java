@@ -157,7 +157,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
     }
 
     /**
-     * Connect an edge between node1 and node2, with an edge with weight >=0.
+     * Connects an edge between node1 and node2, with an edge with weight >=0.
      * Complexity: this method run in O(1) time.
      * Note: if the edge node1-node2 already exists - the method simply updates the weight of the edge.
      * @param node1 - node's key
@@ -304,7 +304,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
     /**
      * This private method returns true if the two HashMaps are equal to each other and false otherwise.
      * Equality is determined by comparing the keys and values of the two Hashmaps.
-     * Note: The method uses "equals" method that compares  each pair of nodes.
+     * Note: The method uses "equals" method that compares each pair of nodes.
      *
      * @param other - an HashMap<Integer,node_info>
      * @return true if the arguments are equal to each other and false otherwise
