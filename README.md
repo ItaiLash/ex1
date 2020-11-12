@@ -4,30 +4,30 @@
 This project is an assignment in an object-oriented course at Ariel University.
 The project consists of 5 classes, 3 interfaces and 2 implementations that I will detail below.
 This assignment is an infrastructure of data structure and algorithms for the duration of the course.
-The task implements a data structure of an weighted and undirectional graph.
+The task implements a data structure of a weighted and unidirectional graph.
 The project implements a number of algorithms on the graph including the ability to duplicate a graph, check if the graph is linked, calculate a short path between two vertices in the graph and the ability to save a graph to your computer and to load it from your computer.
 In the paragraphs below I will detail the classes in the project.
 
 ## WGraph_DS class
 
 WGraph_DS class is an implementation of weighted_graph interface.
-The class contains an inner class - **node**  which is the implemetation of a node_info interface.
+The class contains an inner class - **node**  which is the implementation of a node_info interface.
 
 ### node inner class
-node is an implemetation of a node_info interface, Comparable<node> and Serializable.
+node is an implementation of a node_info interface, Comparable<node> and Serializable.
 node class implement Set of operations applicable on a
-node (vertex) in an (unidirectional) weighted graph.
+node (vertex) in a (unidirectional) weighted graph.
   
 Each NodeData contains few fields:
-* key : A unique key that is used as each node's ID.
-* tag & info : Variables that is used in some of the functions (represent distance from another node, etc.)
+* key : A unique key used as each node's ID.
+* tag & info : Variables that is used in some later methods (represent distance from another node, etc.)
 * pre: A variable that is used in later functions, by default initialized to null.
 * ni : HashMap data structure that is used to store each NodeData neighbors(by neighbor I mean another node that has an edge with this node).
 * niDis: HashMap data structure that is used to store the weight (length) of the edge between this node and its neighbors.
        
-In fact each node contains a list of all the nodes that it has an edge with.
+In fact each node contains a list of all the nodes that it has an edge with,
 And another list of all the distances from those nodes.
-The two lists of neighbors and edges are implemented by HashMap.
+Both neighbor and edges lists are implemented by HashMap.
 I chose to use HashMap data structure because it is easy to store data with the help of the unique key of each node and in addition it allows quick access to each of the neighbors of the node O(1).
 Detailed explanation about HashMap:
 https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html
@@ -42,15 +42,15 @@ https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html
 * hasNi : checks if the nodes are adjacent (there is an edge between them) - O(1).
 * addNi : add a weighted edge between the nodes (in other words the method adds the node to this node HashMap) - O(1).
 * removeNode : removes the edge between the nodes (in other words the method delete the node from this node HashMap) - O(1)
-* compareTo : override on compareTo in order to compare two nodes just by their tag (used in Wgraph_algo class).
+* compareTo : override on compareTo in order to compare two nodes just by their tag (used in WGraph_Algo class).
 * equals : override on equals in order to checks if two nodes are equal, equality is determined by comparing all the fields of the two nodes including Hashmap's keys and values.
 
 **Back to WGraph_DS class**
 
 This class is an implementation of weighted_graph interface.
 WGraph_DS class implement an unidirectional weighted graph.
-It support a large number of nodes (over 10^6, with average degree of 10).
-This implementation is also based on HashMap data structure.
+It supports a large number of nodes (over 10^6, with average degree of 10).
+This implementation also based on HashMap data structure.
 
 Each WGraph_DS contains few fields:
 ‫*‬ wg : HashMap data structure that represent a graph, used to store all the nodes in the graph.
@@ -67,11 +67,11 @@ And at the same time each node contains two lists of its neighbors(=edges) and d
 * hasEdge : returns true if and only if there is an edge between node1 and node2 - O(1).
 * getEdge : eturns the weight of the edge between node1 and node2 - O(1).
 * addNode : adds a new node to the graph with the given key - O(1).
-* connect : Connects an edge between node1 and node2, with an edge with posetive weight(if the edge node1-node2 already exists - the method simply updates the weight of the edge) - O(1).
+* connect : Connects an edge between node1 and node2, with an edge with positive weight(if the edge node1-node2 already exists - the method simply updates the weight of the edge) - O(1).
 * getV : returns a pointer (shallow copy) for the collection representing all the nodes in the graph - O(1).
 * getV : returns a collection of the neighbors of the node by his key - O(1).
 * removeNode : delete the node (with the given ID) from the graph and removes all edges which starts or ends at this node - O(n), |v|=n.
-* removeEdge : delete the edge node1-node2 from the graph (if the edge does not exists in the graph the method simply does nothing) - O(1).
+* removeEdge : delete the edge node1-node2 from the graph (if the edge does not exist in the graph the method simply does nothing) - O(1).
 * nodeSize : returns the number of nodes in the graph - O(1).
 * edgeSize : returns the number of edges in the graph - O(1).
 * getMC : returns the Mode Count for testing changes in the graph - O(1).
@@ -102,16 +102,16 @@ The only field in the class is a weighted graph on which we want to perform the 
 
 #### private methods
 * bfs(weighted_graph g) : private method based on breadth-first search, BFS is an algorithm for traversing or searching graph data structures.
-The method checks whether or not the graph is linked, in other words it checks whether there is a path between each node and each node.
+The method checks whether the graph is linked, in other words it checks whether there is a path between each node and each node.
 The method uses the info of each vertex to know whether it has been visited or not
 The method stored a queue of the visited nodes:
 1. Pop the first node from the queue
 2. Check if the node has already been visited, if so skip it(tag = Green -> visited, tag = Blue -> not visited).
-Otherwise mark it as visited (update his own info) and add the node to the queue.
+Otherwise, mark it as visited (update his own info) and add the node to the queue.
 3. Add this node's neighbors to the queue and repeat these steps.
 
 After the queue is empty check the info of all the nodes in this graph.
-If all the nodes in the graph are marked as visited the method will return true, otherwise false.
+If all the nodes in the graph marked as visited the method will return true, otherwise false.
 Note: The method change the info values.
 Complexity: O(|V|+|E|), |V|=number of nodes, |E|=number of edges.
 
@@ -129,14 +129,14 @@ The method stored a priority queue(priority is determined by the tag) of the vis
 3. After going through all the neighbors of the node,updates that we visited this node by change his info to "Green" and therefore will not visit it again.
 4. Repeat these steps until the queue is empty or has reached the destination node.
 
-If the queue is empty it means it did not reach the destination node (the graph is not connected), return infinity.
-Otherwise returns the tag of the destination node.
+If the queue is empty it means it did not reach the destination node (the graph not connected), return infinity.
+Otherwise, returns the tag of the destination node.
 Note: The method change the info,tag and pre values.
 Complexity: O((|V|+|E|)log|V|), |V|=number of nodes, |E|=number of edges.
 
-* resetInfo :rivate method resets the value of info in each node in the graph.
+* resetInfo : private method resets the value of info in each node in the graph.
 Reset the value = change it back to default value: Blue.
-* resetTag : rivate method resets the values of all the tags of the nodes in the graph.
+* resetTag : private method resets the values of all the tags of the nodes in the graph.
 Reset the value = change it back to default value: Integer.MAX_VALUE (infinity).
 * resetPre : private method resets the value of pre in each node in the graph.
 Reset the value = change it back to default value: null.
