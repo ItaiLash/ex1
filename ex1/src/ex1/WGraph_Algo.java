@@ -209,11 +209,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
 
             System.out.println("The weighted graph has been deserialized ");
         }
-        catch (IOException ex) {
-            System.out.print("Error reading file\n" + ex);
-            return false;
-        }
-        catch (ClassNotFoundException ex) {
+        catch (IOException | ClassNotFoundException ex) {
             System.out.print("Error reading file\n" + ex);
             return false;
         }
@@ -364,6 +360,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
+        if(!(o instanceof WGraph_Algo)) return false;
         WGraph_Algo that = (WGraph_Algo) o;
         return this.wg.equals(that.wg);
     }
@@ -424,64 +421,5 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
             }
         }
         return nwg;
-    }
-
-
-    public static void main(String[] args) {
-        WGraph_Algo wg = new WGraph_Algo();
-        WGraph_DS wg2 = new WGraph_DS();
-        wg2.addNode(0);
-        wg2.addNode(1);
-        wg2.addNode(2);
-        wg2.addNode(3);
-        wg2.addNode(4);
-        wg2.addNode(5);
-        wg2.addNode(6);
-        wg2.addNode(7);
-        wg2.addNode(8);
-        wg2.addNode(10);
-
-        wg2.connect(0, 1, 1);
-        wg2.connect(0, 2, 10);
-
-        wg2.connect(1, 4, 2);
-        wg2.connect(1, 5, 7);
-
-        wg2.connect(2, 4, 3);
-        wg2.connect(2, 6, 10);
-        wg2.connect(2, 3, 10);
-
-        wg2.connect(3, 6, 10);
-
-        wg2.connect(4, 5, 1);
-        wg2.connect(4, 7, 4);
-
-
-        wg2.connect(5, 7, 1);
-        wg2.connect(5, 8, 10);
-        wg2.connect(5, 10, 10);
-
-        wg2.connect(6, 10, 10);
-
-        wg2.connect(7, 10, 2);
-
-        wg2.connect(8, 10, 10);
-
-        wg.init(wg2);
-        System.out.println(wg.isConnected());
-        System.out.println(wg);
-        double d = wg.shortestPathDist(0, 2);
-        System.out.println(d);
-        System.out.println(wg.shortestPath(0, 2));
-        weighted_graph wg3 = wg.copy();
-        weighted_graph_algorithms gra = new WGraph_Algo();
-        gra.init(wg3);
-
-        System.out.println(wg.save("/Users/itailash/Desktop/test/testSeri2.txt"));
-        System.out.println(wg.load("/Users/itailash/Desktop/test/testSeri2.txt"));
-        System.out.println(wg.wg);
-        System.out.println(wg.equals(gra));
-
-
     }
 }

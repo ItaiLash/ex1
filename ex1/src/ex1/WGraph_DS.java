@@ -88,7 +88,9 @@ public class WGraph_DS implements weighted_graph, Serializable {
             Collection<node_info> niArr = temp.getNi();
             for (node_info n2 : niArr) {
                 node temp2 = (node) n2;
-                this.connect(temp.getKey(), temp2.getKey(), other.getEdge(temp.getKey(), temp2.getKey()));
+                if(!this.hasEdge(temp.getKey(),temp2.getKey())) {
+                    this.connect(temp.getKey(), temp2.getKey(), other.getEdge(temp.getKey(), temp2.getKey()));
+                }
             }
         }
     }
@@ -133,6 +135,9 @@ public class WGraph_DS implements weighted_graph, Serializable {
      */
     @Override
     public double getEdge(int node1, int node2) {
+        if(!this.wg.containsKey(node1) || !this.wg.containsKey(node2)){
+            throw new RuntimeException("One or more of your keys does not exist in the graph");
+        }
         node n1 = (node) this.wg.get(node1);
         if (n1.hasNi(node2)) {
             return n1.niDis.get(node2);
@@ -349,6 +354,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if(!(o instanceof WGraph_DS)) return false;
         WGraph_DS wGraph_ds = (WGraph_DS) o;
         return this.numOfEdge == wGraph_ds.numOfEdge &&
                 this.numOfNode == wGraph_ds.numOfNode &&
@@ -586,11 +592,15 @@ public class WGraph_DS implements weighted_graph, Serializable {
             Collection<node_info> c1 = this.ni.values();
             Iterator<node_info> iterator1 = c1.iterator();
             Collection<node_info> c2 = other.values();
-            Iterator<node_info> iterator2 = c2.iterator();
-            while (iterator1.hasNext() && iterator2.hasNext()) {
+            while (iterator1.hasNext()) {
                 node n1 = (node) iterator1.next();
-                node n2 = (node) iterator2.next();
-                if (!n1.nodeEquals(n2)) {
+                boolean flag = false;
+                for(node_info n2 : c2){
+                    if(n1.nodeEquals(n2)){
+                        flag = true;
+                    }
+                }
+                if (!flag) {
                     return false;
                 }
             }
@@ -611,11 +621,15 @@ public class WGraph_DS implements weighted_graph, Serializable {
             Collection<Double> c1 = this.niDis.values();
             Iterator<Double> iterator1 = c1.iterator();
             Collection<Double> c2 = other.values();
-            Iterator<Double> iterator2 = c2.iterator();
-            while (iterator1.hasNext() && iterator2.hasNext()) {
+            while (iterator1.hasNext()) {
+                boolean flag = false;
                 double d1 = iterator1.next();
-                double d2 = iterator2.next();
-                if (d1 != d2) {
+                for(double d2 : c2){
+                    if(d1 == d2){
+                        flag = true;
+                    }
+                }
+                if (!flag) {
                     return false;
                 }
             }
@@ -637,6 +651,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
+            if(!(o instanceof node)) return false;
             node node = (node) o;
             return this.key == node.key &&
                     Double.compare(node.tag, this.tag) == 0 &&
@@ -644,66 +659,5 @@ public class WGraph_DS implements weighted_graph, Serializable {
                     this.hashMapOfNodeNiEquals(node.ni) &&
                     this.hashMapOfDoublesEquals(node.niDis);
         }
-    }
-
-    public static void main(String[] args) {
-        WGraph_DS wg = new WGraph_DS();
-        wg.addNode(0);
-        wg.addNode(1);
-        wg.addNode(2);
-        wg.addNode(0);
-        wg.connect(0, 1, 0.5);
-        wg.connect(0, 2, 3);
-        System.out.println(wg);
-        System.out.println(wg.getMC());
-        System.out.println(wg.edgeSize());
-        System.out.println(wg.getEdge(0, 1));
-        System.out.println(wg.getNode(2));
-        System.out.println(wg.getV());
-        System.out.println(wg.getV(0));
-        System.out.println(wg.hasEdge(0, 1));
-        System.out.println(wg.hasEdge(1, 2));
-        System.out.println(wg.nodeSize());
-//        wg.removeNode(0);
-//        System.out.println(wg);
-//        System.out.println(wg.nodeSize());
-//        System.out.println(wg.edgeSize());
-        WGraph_DS wg2 = new WGraph_DS(wg);
-        System.out.println(wg2.edgeSize());
-        System.out.println(wg2.nodeSize());
-        System.out.println();
-
-        System.out.println(wg2);
-        wg2.removeNode(0);
-        System.out.println(wg2.edgeSize());
-        System.out.println(wg2.nodeSize());
-        System.out.println();
-
-        System.out.println(wg2);
-        System.out.println(wg);
-        System.out.println(wg.equals(wg2));
-        wg2.addNode(0);
-        System.out.println(wg2.nodeSize());
-
-        System.out.println(wg.equals(wg2));
-        wg2.connect(0, 1, 0.5);
-        wg2.connect(0, 2, 3);
-        System.out.println(wg2.edgeSize());
-        System.out.println(wg.equals(wg2));
-        System.out.println(wg2);
-        System.out.println(wg);
-        WGraph_DS wg3 = new WGraph_DS(wg);
-        System.out.println(wg.equals(wg3));
-        System.out.println(wg.getV());
-        System.out.println(wg2.getV());
-        System.out.println(wg);
-        System.out.println(wg.edgeSize());
-        System.out.println(wg.getMC());
-        wg.connect(0,1,4);
-        System.out.println(wg);
-        System.out.println(wg.edgeSize());
-        System.out.println(wg.getMC());
-
-
     }
 }
