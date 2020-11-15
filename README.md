@@ -177,6 +177,7 @@ public static void main(String[] args) {
      }
 ```
 The code creates the graph:
+
 <img src="ex1/docs/graphExample.png" width="500">
 
 The output will be:
