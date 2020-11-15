@@ -166,12 +166,20 @@ public class WGraph_DS implements weighted_graph, Serializable {
      */
     @Override
     public void connect(int node1, int node2, double w) {
+        if(w<0){
+            throw new RuntimeException("The weight must be positive");
+        }
         node n1 = (node) this.wg.get(node1);
         node n2 = (node) this.wg.get(node2);
-        if (!n1.hasNi(node2) && node1 != node2 && n1 != null & n2 != null) {
+        if(hasEdge(node1,node2) && getEdge(node1,node2) != w){
             n1.addNi(n2, w);
             n2.addNi(n1, w);
-            mc++;
+            this.mc++;
+        }
+        else if (!n1.hasNi(node2) && node1 != node2 && n1 != null & n2 != null) {
+            n1.addNi(n2, w);
+            n2.addNi(n1, w);
+            this.mc++;
             this.numOfEdge++;
         }
     }
@@ -688,6 +696,13 @@ public class WGraph_DS implements weighted_graph, Serializable {
         System.out.println(wg.equals(wg3));
         System.out.println(wg.getV());
         System.out.println(wg2.getV());
+        System.out.println(wg);
+        System.out.println(wg.edgeSize());
+        System.out.println(wg.getMC());
+        wg.connect(0,1,4);
+        System.out.println(wg);
+        System.out.println(wg.edgeSize());
+        System.out.println(wg.getMC());
 
 
     }
