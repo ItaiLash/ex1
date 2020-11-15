@@ -177,14 +177,14 @@ public static void main(String[] args) {
      }
 ```
 The code creates the graph:
-![GraphExample](ex1/docs/graphExample.png)
+<img src="ex1/docs/graphExample.png" width="500">
+
 The output will be:
 ```
 True
 6.7
 [{Key:1,Neighbors:[4(1.7),6(9.3)]}, {Key:4,Neighbors:[1(1.7),2(3.1),3(5.0),5(2.3)]}, {Key:5,Neighbors:[4(2.3),6(2.7)]}, {Key:6,Neighbors:[1(9.3),5(2.7)]}]
 ```
-
 ## External info:
 - More about graph : https://en.wikipedia.org/wiki/Graph_%28discrete_mathematics%29
 - More about Dijkstra's algorithm : https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
