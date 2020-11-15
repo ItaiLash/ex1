@@ -1,3 +1,4 @@
+![ArielLogo](ex1/docs/ArielLogo.png)
 # Assignment 1
 
 ### Introduction
