@@ -1,6 +1,11 @@
 ![ArielLogo](ex1/docs/ArielLogo.png)
 # Assignment 1
 
+> Made by Itai Lashover
+>
+> GitHub page: [https://github.com/ItaiLash](https://github.com/ItaiLash)
+
+
 ### Introduction
 This project is an assignment in an object-oriented course at Ariel University.
 The project consists of 5 classes, 3 interfaces and 2 implementations that I will detail below.
@@ -31,7 +36,7 @@ And another list of all the distances from those nodes.
 Both neighbor and edges lists are implemented by HashMap.
 I chose to use HashMap data structure because it is easy to store data with the help of the unique key of each node and in addition it allows quick access to each of the neighbors of the node O(1).
 Detailed explanation about HashMap:
-https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html
+[https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html](https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html)
 
 #### main methods 
 
@@ -141,3 +146,47 @@ Reset the value = change it back to default value: Blue.
 Reset the value = change it back to default value: Integer.MAX_VALUE (infinity).
 * resetPre : private method resets the value of pre in each node in the graph.
 Reset the value = change it back to default value: null.
+
+# How to use?
+Create main class and run the code below (for example):
+```
+public static void main(String[] args) {  
+
+     WGraph_Algo wg = new WGraph_Algo();
+     WGraph_DS wg2 = new WGraph_DS();
+     wg2.addNode(1);
+     wg2.addNode(2);
+     wg2.addNode(3);
+     wg2.addNode(4);
+     wg2.addNode(5);
+     wg2.addNode(6);
+
+     wg2.connect(1, 4, 1.7);
+     wg2.connect(1, 6, 9.3);
+     wg2.connect(2, 4, 3.1);
+     wg2.connect(3, 4, 5.0);
+     wg2.connect(4, 5, 2.3);
+     wg2.connect(5, 6, 2.7);
+     wg2.connect(5, 6, 2.7);
+
+     wg.init(wg2);
+        
+     System.out.println(wg.isConnected());
+     System.out.println(wg.shortestPathDist(1, 6));        
+     System.out.println(wg.shortestPath(1, 6));
+     }
+```
+The code creates the graph:
+![GraphExample](ex1/docs/graphExample.png)
+The output will be:
+```
+True
+6.7
+[{Key:1,Neighbors:[4(1.7),6(9.3)]}, {Key:4,Neighbors:[1(1.7),2(3.1),3(5.0),5(2.3)]}, {Key:5,Neighbors:[4(2.3),6(2.7)]}, {Key:6,Neighbors:[1(9.3),5(2.7)]}]
+```
+
+## External info:
+- More about graph : https://en.wikipedia.org/wiki/Graph_%28discrete_mathematics%29
+- More about Dijkstra's algorithm : https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+- More about BFS algorithm : https://en.wikipedia.org/wiki/Breadth-first_search
+
