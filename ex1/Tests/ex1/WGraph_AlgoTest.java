@@ -70,6 +70,7 @@ class WGraph_AlgoTest {
         assertTrue(g0.isConnected());
         double shortest = g0.shortestPathDist(0, 9);
         assertEquals(10.4, shortest, 0.000001);
+        assertEquals(0,g0.shortestPathDist(4,4));
     }
 
 
@@ -83,6 +84,10 @@ class WGraph_AlgoTest {
         int path[] = listToArray(shortestP);
         int expected[] = {0, 6, 5, 4, 7, 10, 9};
         assertArrayEquals(expected, path);
+        List shortestP2 = g0.shortestPath(4, 4);
+        int path2[] = listToArray(shortestP2);
+        int expected2[] = {4};
+        assertArrayEquals(expected2, path2);
 
     }
 
