@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * This class is an implementation of weighted_graph interface.
@@ -362,6 +363,14 @@ public class WGraph_DS implements weighted_graph, Serializable {
                 this.graphNodeEquals(wGraph_ds.wg);
     }
 
+    /**Override hashcode because equals changed.
+     *
+     * @return hashcode
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(wg, numOfEdge, numOfNode, mc);
+    }
 
     /**
      * This private inner class is an implementation of node_info interface.
@@ -658,6 +667,15 @@ public class WGraph_DS implements weighted_graph, Serializable {
                     this.info.compareTo(node.info) == 0 &&
                     this.hashMapOfNodeNiEquals(node.ni) &&
                     this.hashMapOfDoublesEquals(node.niDis);
+        }
+
+        /**Override hashcode because equals changed.
+         *
+         * @return hashcode
+         */
+        @Override
+        public int hashCode() {
+            return Objects.hash(key, info, tag, pre, ni, niDis);
         }
     }
 }

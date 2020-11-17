@@ -365,6 +365,14 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
         return this.wg.equals(that.wg);
     }
 
+    /**Override hashcode because equals changed.
+     *
+     * @return hashcode
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(wg);
+    }
 
     ////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     //////////////////////////MY SAVE & LOAD\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
