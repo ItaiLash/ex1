@@ -14,6 +14,13 @@ class WGraph_DSTest {
     private static weighted_graph g;
     private static Random _rnd = null;
 
+    /**Returns weighted_graph g after random add of v_size nodes and e_size edge.
+     *
+     * @param v_size - number of nodes
+     * @param e_size - number of edges
+     * @param seed - seed
+     * @return weighted_graph g after initialize.
+     */
     public static weighted_graph graph_creator(int v_size, int e_size, int seed) {
         g = new WGraph_DS();
         _rnd = new Random(seed);
@@ -52,7 +59,7 @@ class WGraph_DSTest {
         int size = g.nodeSize();
         Collection<node_info> V = g.getV();
         node_info[] nodes = new node_info[size];
-        V.toArray(nodes); // O(n) operation
+        V.toArray(nodes);
         int[] ans = new int[size];
         for(int i=0;i<size;i++) {ans[i] = nodes[i].getKey();}
         Arrays.sort(ans);
