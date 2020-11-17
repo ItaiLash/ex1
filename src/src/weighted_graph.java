@@ -1,4 +1,3 @@
-package ex1;
 import java.util.Collection;
 
 /**
