@@ -1,4 +1,4 @@
-![ArielLogo](ex1/docs/ArielLogo.png)
+![ArielLogo](docs/ArielLogo.png)
 # Assignment 1
 
 > Made by Itai Lashover
@@ -178,7 +178,7 @@ public static void main(String[] args) {
 ```
 The code creates the graph:
 
-<img src="ex1/docs/graphExample.png" width="500">
+<img src="docs/graphExample.png" width="500">
 
 The output will be:
 ```
