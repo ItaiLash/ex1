@@ -1,5 +1,3 @@
-package ex1.src;
-
 import java.util.*;
 import java.io.*;
 
