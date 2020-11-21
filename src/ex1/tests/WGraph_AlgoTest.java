@@ -1,3 +1,6 @@
+package ex1.tests;
+import ex1.src.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
@@ -56,7 +59,7 @@ class WGraph_AlgoTest {
         g0 = WGraph_DSTest.graph_creator(10, 30, 1);
         ag0.init(g0);
         boolean b = ag0.isConnected();
-        assertTrue(b);
+        Assertions.assertTrue(b);
     }
 
     @Test
@@ -66,7 +69,7 @@ class WGraph_AlgoTest {
         g0.init(g);
         assertTrue(g0.isConnected());
         double shortest = g0.shortestPathDist(0, 9);
-        assertEquals(10.4, shortest, 0.000001);
+        Assertions.assertEquals(10.4, shortest, 0.000001);
         assertEquals(0,g0.shortestPathDist(4,4));
     }
 
@@ -77,14 +80,14 @@ class WGraph_AlgoTest {
         weighted_graph_algorithms g0 = new WGraph_Algo();
         g0.init(g);
         List shortestP = g0.shortestPath(0, 9);
-        assertEquals(7, shortestP.size(), 0.000001);
+        Assertions.assertEquals(7, shortestP.size(), 0.000001);
         int path[] = listToArray(shortestP);
         int expected[] = {0, 6, 5, 4, 7, 10, 9};
-        assertArrayEquals(expected, path);
+        Assertions.assertArrayEquals(expected, path);
         List shortestP2 = g0.shortestPath(4, 4);
         int path2[] = listToArray(shortestP2);
         int expected2[] = {4};
-        assertArrayEquals(expected2, path2);
+        Assertions.assertArrayEquals(expected2, path2);
 
     }
 
@@ -94,7 +97,7 @@ class WGraph_AlgoTest {
         weighted_graph_algorithms g0 = new WGraph_Algo();
         g0.init(g);
         g0.save("theGraph.obj");
-        weighted_graph gra = WGraph_DSTest1.graph_creator(30,30*4,1);
+        weighted_graph gra = WGraph_DSTest.graph_creator(30,30*4,1);
         weighted_graph_algorithms g1 = new WGraph_Algo();
         g1.init(gra);
         g0.load("theGraph.obj");

@@ -1,4 +1,4 @@
-![ArielLogo](docs/ArielLogo.png)
+![ArielLogo](../../docs/ArielLogo.png)
 # Assignment 1
 
 > Made by Itai Lashover

@@ -1,3 +1,7 @@
+package ex1.tests;
+import ex1.src.*;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -72,13 +76,13 @@ class WGraph_DSTest {
         Collection<node_info> ni1 = g.getV(1);
         double w = g.getEdge(key, ni1.iterator().next().getKey());
         double ex = 0.063231050;
-        assertEquals(w,ex,0.0001);
+        Assertions.assertEquals(w,ex,0.0001);
     }
 
     @Test
     void getNodeDoesNotExist() {
         graph_creator(5,7,1);
-        assertNull(g.getNode(6));
+        Assertions.assertNull(g.getNode(6));
         System.out.println(g);
     }
 
@@ -108,7 +112,7 @@ class WGraph_DSTest {
     void DoesNotGetEdge() {
         graph_creator(5,7,1);
         assertEquals(-1,g.getEdge(1,3));
-        assertThrows(RuntimeException.class, () -> g.getEdge(4,5));
+        Assertions.assertThrows(RuntimeException.class, () -> g.getEdge(4,5));
     }
 
     @Test
@@ -173,7 +177,7 @@ class WGraph_DSTest {
         g.removeNode(2);
         g.removeNode(2);
         int size = g.nodeSize();
-        assertEquals(2,size);
+        Assertions.assertEquals(2,size);
     }
 
     @Test
@@ -184,7 +188,7 @@ class WGraph_DSTest {
         g.removeEdge(3,9);
         g.removeEdge(0,1);      //edge does not exist
         int size = g.edgeSize();
-        assertEquals(18,size);
+        Assertions.assertEquals(18,size);
     }
 
 
